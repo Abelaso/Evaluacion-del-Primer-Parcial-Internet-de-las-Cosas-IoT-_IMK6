@@ -1,11 +1,11 @@
 # 📡 Evaluación del Primer Parcial - Internet de las Cosas (IoT)
 
-## 📌 Descripción
+##  Descripción
 Este proyecto implementa un **sistema de monitoreo de temperatura** utilizando una **Raspberry Pi Pico W**, un **sensor LM35**, y la plataforma **ThingSpeak** para el análisis y visualización de datos en tiempo real. También se utiliza **MATLAB Analysis** para calcular promedios y enviar alertas cuando la temperatura supera los **50°C**.
 
 ---
 
-## 📌 Requisitos
+##  Requisitos
 ✅ **Raspberry Pi Pico W**  
 ✅ **Sensor de temperatura LM35**  
 ✅ **Conexión WiFi**  
@@ -16,17 +16,17 @@ Este proyecto implementa un **sistema de monitoreo de temperatura** utilizando u
 
 ---
 
-## 📌 Contenido del Repositorio
-📂 **Código en MicroPython** → Código bien documentado para la Raspberry Pi Pico W.  
-📂 **Archivo README.md** → Descripción del proyecto e instrucciones de instalación y uso.  
-📂 **Capturas de Pantalla** → Imágenes del código, ThingSpeak y MATLAB Analysis en funcionamiento.  
+##  Contenido del Repositorio
+ **Código en MicroPython** → Código bien documentado para la Raspberry Pi Pico W.  
+ **Archivo README.md** → Descripción del proyecto e instrucciones de instalación y uso.  
+ **Capturas de Pantalla** → Imágenes del código, ThingSpeak y MATLAB Analysis en funcionamiento.  
 
 ---
 
-## 📌 Instrucciones de Instalación y Configuración
+##  Instrucciones de Instalación y Configuración
 
 ### 🔹 Instalación de Thonny
-1️⃣ **Descarga** Thonny IDE desde [thonny.org](https://thonny.org/).  
+1️⃣ **Descarga** Thonny desde [thonny.org](https://thonny.org/).  
 2️⃣ **Instala** el programa en tu computadora.  
 3️⃣ **Abre Thonny** y selecciona **"Herramientas" → "Opciones"**.  
 4️⃣ En la pestaña **"Interprete"**, selecciona **MicroPython (Raspberry Pi Pico)**.  
@@ -52,13 +52,13 @@ Este proyecto implementa un **sistema de monitoreo de temperatura** utilizando u
 ---
 
 ### 🔹 Configuración del Hardware
-📌 **Conexiones del sensor LM35:**  
+ **Conexiones del sensor LM35:**  
 1️⃣ **VCC** del LM35 a **3.3V** de la Raspberry Pi Pico W.  
 2️⃣ **GND** del LM35 a **GND** de la Raspberry Pi Pico W.  
 3️⃣ **OUT** del LM35 a **GP26 (ADC0)** de la Raspberry Pi Pico W.  
 (Apóyate en la imagen **"Raspberry pinout"** para ver las conexiones del microcontrolador).  
 
-📌 **Conexión de la Raspberry Pi Pico W:**  
+ **Conexión de la Raspberry Pi Pico W:**  
 1️⃣ **Conéctala a la computadora** con un cable **micro-USB**.  
 
 ---
@@ -80,13 +80,13 @@ Este proyecto implementa un **sistema de monitoreo de temperatura** utilizando u
 
 ---
 
-## 🚀 **¡Tu sistema ahora enviará datos automáticamente a ThingSpeak y calculará el promedio de temperatura sin intervención manual!**
+##  **Tu sistema ahora enviará datos automáticamente a ThingSpeak y calculará el promedio de temperatura sin intervención manual**
 
 (Si necesitas ayuda, revisa las capturas de pantalla incluidas en este repositorio).  
 
 ---
 
-## 📌 Información del Autor
+##  Información del Autor
 📍 **Autor:** *Rodriguez Guerrero Abel Israel*  
 📍 **Universidad:** *Universidad Modelo*  
 📍 **Materia:** *Internet de las Cosas*  
