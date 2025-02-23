@@ -1,0 +1,56 @@
+% ???? CONFIGURACIÓN DEL CANAL
+canalID = 2851829; % ID del canal en ThingSpeak
+apiKeyLectura = 'YMZ6Y18IF7T1QPC6'; % API Key de lectura
+apiKeyEscritura = '639WYS3QCL49XPO0'; % API Key de escritura
+fieldNumLM35 = 1; % Field 1 almacena la temperatura LM35
+fieldNumPromedio = 3; % Field 3 almacena el promedio
+numDatosRequeridos = 10; % Número de datos necesarios para calcular el promedio
+
+% ???? LEER LOS DATOS ALMACENADOS
+datosPrevios = thingSpeakRead(canalID, 'Fields', fieldNumPromedio, 'NumPoints', numDatosRequeridos, 'ReadKey', apiKeyLectura);
+
+% ???? OBTENER EL NUEVO DATO DEL SENSOR LM35
+nuevoDato = thingSpeakRead(canalID, 'Fields', fieldNumLM35, 'NumPoints', 1, 'ReadKey', apiKeyLectura);
+
+% ???? VERIFICAR SI SE OBTUVO UN NUEVO DATO
+if isempty(nuevoDato) || isnan(nuevoDato)
+    disp('⚠️ No se obtuvo un nuevo dato. Esperando más mediciones.');
+    return;
+end
+
+% ???? AGREGAR EL NUEVO DATO AL HISTORIAL
+if isempty(datosPrevios)  % Si no hay datos previos, inicializa la lista
+    datosPrevios = nuevoDato;
+else
+    datosPrevios = [datosPrevios; nuevoDato]; % Añadir nuevo dato a la lista
+end
+
+% ???? ASEGURAR QUE SOLO SE GUARDEN LOS ÚLTIMOS 10 DATOS
+if length(datosPrevios) > numDatosRequeridos
+    datosPrevios(1) = []; % Eliminar el dato más antiguo
+end
+
+% ???? VERIFICAR SI YA TENEMOS 10 DATOS
+if length(datosPrevios) < numDatosRequeridos
+    disp('⏳ Aún no hay suficientes datos para calcular el promedio. Esperando más mediciones.');
+    return;
+end
+
+% ???? CALCULAR EL PROMEDIO
+promedioTemperatura = mean(datosPrevios, 'omitnan'); % Ignora valores NaN si existen
+
+% ???? MOSTRAR PROMEDIO EN CONSOLA
+fprintf('????️ Promedio de los últimos 10 datos: %.2f°C\n', promedioTemperatura);
+
+% ???? GUARDAR EL PROMEDIO EN FIELD 3 DE THINGSPEAK
+thingSpeakWrite(canalID, 'Fields', fieldNumPromedio, 'Values', promedioTemperatura, 'WriteKey', apiKeyEscritura);
+disp('✅ Promedio guardado en ThingSpeak.');
+
+% ???? SI EL PROMEDIO SUPERA LOS 50°C, ENVIAR ALERTA POR EMAIL
+if promedioTemperatura > 50
+    alertMessage = sprintf('???? ALERTA: La temperatura promedio es %.2f°C y supera los 50°C.', promedioTemperatura);
+    disp(alertMessage);
+    
+    % ???? ENVIAR ALERTA A THINGSPEAK ALERTS
+    thingSpeakAlert('Alerta Temperatura Alta', alertMessage);
+end
