@@ -56,7 +56,7 @@ Este proyecto implementa un **sistema de monitoreo de temperatura** utilizando u
 1️⃣ **VCC** del LM35 a **3.3V** de la Raspberry Pi Pico W.  
 2️⃣ **GND** del LM35 a **GND** de la Raspberry Pi Pico W.  
 3️⃣ **OUT** del LM35 a **GP26 (ADC0)** de la Raspberry Pi Pico W.  
-(Apóyate en la imagen **"Raspberry pinout"** para ver las conexiones del microcontrolador).  
+(Apóyate en la imagen **"Raspberry pinout"** y **"LM35 conexiones"** para ver las conexiones del microcontrolador).  
 
  **Conexión de la Raspberry Pi Pico W:**  
 1️⃣ **Conéctala a la computadora** con un cable **micro-USB**.  
