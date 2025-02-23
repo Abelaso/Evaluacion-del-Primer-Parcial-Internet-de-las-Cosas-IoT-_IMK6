@@ -1,4 +1,4 @@
-# 📡 Evaluación del Primer Parcial - Internet de las Cosas (IoT)
+#  Evaluación del Primer Parcial - Internet de las Cosas (IoT)
 
 ##  Descripción
 Este proyecto implementa un **sistema de monitoreo de temperatura** utilizando una **Raspberry Pi Pico W**, un **sensor LM35**, y la plataforma **ThingSpeak** para el análisis y visualización de datos en tiempo real. También se utiliza **MATLAB Analysis** para calcular promedios y enviar alertas cuando la temperatura supera los **50°C**.
