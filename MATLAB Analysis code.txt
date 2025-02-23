@@ -1,56 +1,67 @@
-% ???? CONFIGURACIÓN DEL CANAL
-canalID = 2851829; % ID del canal en ThingSpeak
-apiKeyLectura = 'YMZ6Y18IF7T1QPC6'; % API Key de lectura
-apiKeyEscritura = '639WYS3QCL49XPO0'; % API Key de escritura
-fieldNumLM35 = 1; % Field 1 almacena la temperatura LM35
-fieldNumPromedio = 3; % Field 3 almacena el promedio
-numDatosRequeridos = 10; % Número de datos necesarios para calcular el promedio
+% 📌 CONFIGURACIÓN DEL CANAL
+canalID = 2851829; % ID del canal en ThingSpeak donde se almacenarán los datos
+apiKeyLectura = 'YMZ6Y18IF7T1QPC6'; % API Key utilizada para leer datos del canal
+apiKeyEscritura = '639WYS3QCL49XPO0'; % API Key utilizada para escribir datos en el canal
+fieldNumLM35 = 1; % Número del Field en ThingSpeak donde se almacena la temperatura del sensor LM35
+fieldNumPromedio = 3; % Número del Field en ThingSpeak donde se almacenará el promedio de temperatura
+numDatosRequeridos = 10; % Número de datos necesarios para calcular el promedio de temperatura
 
-% ???? LEER LOS DATOS ALMACENADOS
+% 📌 LEER LOS DATOS ALMACENADOS
+% Lee los últimos 'numDatosRequeridos' valores del Field 3 en ThingSpeak, donde se guarda el promedio
+% Esto es útil para mantener un historial de datos recientes
 datosPrevios = thingSpeakRead(canalID, 'Fields', fieldNumPromedio, 'NumPoints', numDatosRequeridos, 'ReadKey', apiKeyLectura);
 
-% ???? OBTENER EL NUEVO DATO DEL SENSOR LM35
+% 📌 OBTENER EL NUEVO DATO DEL SENSOR LM35
+% Lee el último dato almacenado en Field 1 (temperatura del sensor LM35)
 nuevoDato = thingSpeakRead(canalID, 'Fields', fieldNumLM35, 'NumPoints', 1, 'ReadKey', apiKeyLectura);
 
-% ???? VERIFICAR SI SE OBTUVO UN NUEVO DATO
+% 📌 VERIFICAR SI SE OBTUVO UN NUEVO DATO
+% Si no se obtiene un nuevo dato o el valor es NaN, muestra un mensaje y detiene la ejecución
 if isempty(nuevoDato) || isnan(nuevoDato)
     disp('⚠️ No se obtuvo un nuevo dato. Esperando más mediciones.');
     return;
 end
 
-% ???? AGREGAR EL NUEVO DATO AL HISTORIAL
-if isempty(datosPrevios)  % Si no hay datos previos, inicializa la lista
+% 📌 AGREGAR EL NUEVO DATO AL HISTORIAL
+if isempty(datosPrevios)  % Si no hay datos previos almacenados, inicializa la lista con el nuevo dato
     datosPrevios = nuevoDato;
 else
-    datosPrevios = [datosPrevios; nuevoDato]; % Añadir nuevo dato a la lista
+    datosPrevios = [datosPrevios; nuevoDato]; % Agregar el nuevo dato a la lista de datos previos
 end
 
-% ???? ASEGURAR QUE SOLO SE GUARDEN LOS ÚLTIMOS 10 DATOS
+% 📌 ASEGURAR QUE SOLO SE GUARDEN LOS ÚLTIMOS 10 DATOS
+% Si la lista de datos tiene más de 'numDatosRequeridos', elimina el dato más antiguo
 if length(datosPrevios) > numDatosRequeridos
-    datosPrevios(1) = []; % Eliminar el dato más antiguo
+    datosPrevios(1) = []; % Eliminar el primer dato de la lista para mantener solo los últimos 10
 end
 
-% ???? VERIFICAR SI YA TENEMOS 10 DATOS
+% 📌 VERIFICAR SI YA TENEMOS 10 DATOS
+% Si aún no hay suficientes datos, muestra un mensaje y detiene la ejecución
 if length(datosPrevios) < numDatosRequeridos
     disp('⏳ Aún no hay suficientes datos para calcular el promedio. Esperando más mediciones.');
     return;
 end
 
-% ???? CALCULAR EL PROMEDIO
-promedioTemperatura = mean(datosPrevios, 'omitnan'); % Ignora valores NaN si existen
+% 📌 CALCULAR EL PROMEDIO
+% Calcula el promedio de los últimos 10 valores obtenidos, ignorando posibles valores NaN
+promedioTemperatura = mean(datosPrevios, 'omitnan');
 
-% ???? MOSTRAR PROMEDIO EN CONSOLA
-fprintf('????️ Promedio de los últimos 10 datos: %.2f°C\n', promedioTemperatura);
+% 📌 MOSTRAR PROMEDIO EN CONSOLA
+% Muestra el valor del promedio en la consola para depuración
+fprintf('🌡️ Promedio de los últimos 10 datos: %.2f°C\n', promedioTemperatura);
 
-% ???? GUARDAR EL PROMEDIO EN FIELD 3 DE THINGSPEAK
+% 📌 GUARDAR EL PROMEDIO EN FIELD 3 DE THINGSPEAK
+% Escribe el valor del promedio en Field 3 en ThingSpeak para su almacenamiento y visualización
 thingSpeakWrite(canalID, 'Fields', fieldNumPromedio, 'Values', promedioTemperatura, 'WriteKey', apiKeyEscritura);
 disp('✅ Promedio guardado en ThingSpeak.');
 
-% ???? SI EL PROMEDIO SUPERA LOS 50°C, ENVIAR ALERTA POR EMAIL
+% 📌 SI EL PROMEDIO SUPERA LOS 50°C, ENVIAR ALERTA POR EMAIL
+% Si la temperatura promedio supera los 50°C, genera una alerta y envía un mensaje
 if promedioTemperatura > 50
-    alertMessage = sprintf('???? ALERTA: La temperatura promedio es %.2f°C y supera los 50°C.', promedioTemperatura);
+    alertMessage = sprintf('🚨 ALERTA: La temperatura promedio es %.2f°C y supera los 50°C.', promedioTemperatura);
     disp(alertMessage);
     
-    % ???? ENVIAR ALERTA A THINGSPEAK ALERTS
+    % 📌 ENVIAR ALERTA A THINGSPEAK ALERTS
+    % Llama a la función de alertas de ThingSpeak para enviar un correo de notificación
     thingSpeakAlert('Alerta Temperatura Alta', alertMessage);
 end
