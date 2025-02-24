@@ -65,7 +65,7 @@ Este proyecto implementa un **sistema de monitoreo de temperatura** utilizando u
 
 ### 🔹 Programación en MicroPython
 1️⃣ **Abre Thonny IDE** y crea un nuevo archivo `main.py`.  
-2️⃣ **Copia y pega** el código de MicroPython para conectarse a WiFi y enviar datos a ThingSpeak. (Busca el archivo guardado como main.py en el repositorio)
+2️⃣ **Copia y pega** el código de MicroPython para conectarse a WiFi y enviar datos a ThingSpeak. (Busca el archivo guardado como main.py en el repositorio).
 3️⃣ **Guarda el archivo** como `main.py` en la **Raspberry Pi Pico W** para que se ejecute automáticamente.  
 4️⃣ **Desconéctala de la PC** y conéctala a una **fuente de energía externa**.  
 
